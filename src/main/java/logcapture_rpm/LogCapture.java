@@ -1,8 +1,7 @@
 package logcapture_rpm;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import org.apache.commons.exec.*;
 
 public class LogCapture {
 
@@ -10,18 +9,12 @@ public class LogCapture {
 	
 	public static void main(String[] args) throws IOException {
 		
-		StringBuilder cmd = new StringBuilder();
-		cmd.append("journalctl -o json --cursor=");
-		cmd.append(CURSOR);
 		
-		List<String> command = new ArrayList<String>();
-		//command.add(cmd.toString());
-		command.add("date");
-		
-		ProcessBuilder builder = new ProcessBuilder();
-		builder.command(command);
-		
-		builder.inheritIO().start();
+		CommandLine cmdLine = new CommandLine("journal");
+		cmdLine.addArgument("-o json");
+		cmdLine.addArgument("--cursor=\"" + CURSOR + "\"");
+		DefaultExecutor executor = new DefaultExecutor();
+		int exitvalue = executor.execute(cmdLine);
 
 	}
 
